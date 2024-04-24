@@ -1,6 +1,8 @@
 package com.TW.mobile_app_ws.controller;
 
+import com.TW.mobile_app_ws.ui.model.request.UserDetailsRequestModel;
 import com.TW.mobile_app_ws.ui.model.response.UserRest;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,20 @@ public class UserController {
         return new ResponseEntity<UserRest>(returnValue,HttpStatus.OK);
     }
 
-    @PostMapping()
-    public String createUser(){
-        return "create user was called";
+    @PostMapping(consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE
+        },
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails){
+        UserRest returnValue = new UserRest();
+        returnValue.setFirstName(userDetails.getFirstName());
+        returnValue.setLastName(userDetails.getLastName());
+        returnValue.setEmail(userDetails.getEmail());
+
+        return new ResponseEntity<UserRest>(returnValue,HttpStatus.OK);
     }
 
     @PutMapping()
